@@ -2242,7 +2242,14 @@
         
         if (localDataString) {
             try {
-                words = JSON.parse(localDataString);
+                const localWords = JSON.parse(localDataString);
+                // 로컬 데이터의 첫 단어가 embeddedData와 다르면 새 데이터로 교체
+                if (localWords.length > 0 && embeddedData.length > 0 && localWords[0].word !== embeddedData[0].word) {
+                    words = embeddedData;
+                    try { localStorage.setItem('myWordBook', JSON.stringify(words)); } catch(e2) {}
+                } else {
+                    words = localWords;
+                }
             } catch(e) {
                 words = embeddedData.length > 0 ? embeddedData : [];
                 try { localStorage.setItem('myWordBook', JSON.stringify(words)); } catch(e2) {}
